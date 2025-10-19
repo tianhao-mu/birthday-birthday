@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>陈思羽生日快乐 - HDMI风格</title>
-  <!-- Tailwind CSS -->
+  <title>陈思羽生日快乐</title>
+  <!-- Tailwindwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
   
   <script>
-    tailwind.config = {
+    tailwindwind.config = {
       theme: {
         extend: {
           colors: {
@@ -34,6 +34,7 @@
             'fade-in': 'fadeIn 1s ease-in-out',
             'scale-in': 'scaleIn 0.5s ease-out',
             'slide-in': 'slideIn 0.8s ease-out',
+            'bounce': 'bounce 0.5s ease-in-out',
           },
           keyframes: {
             float: {
@@ -55,6 +56,11 @@
             slideIn: {
               '0%': { transform: 'translateY(30px)', opacity: 0 },
               '100%': { transform: 'translateY(0)', opacity: 1 },
+            },
+            bounce: {
+              '0%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+              '100%': { transform: 'translateY(0)' },
             },
           }
         }
@@ -89,6 +95,9 @@
         height: 10px;
         opacity: 0;
         animation: confetti 5s ease-in-out infinite;
+        z-index: 60; /* 提高z-index确保显示在最上层 */
+        pointer-events: none; /* 确保不影响响应用户交互 */
+        top: -50px; /* 从顶部上方开始 */
       }
       @keyframes confetti {
         0% {
@@ -96,7 +105,7 @@
           opacity: 1;
         }
         100% {
-          transform: translateY(100vh) rotate(720deg);
+          transform: translateY(calc(100vh + 50px)) rotate(720deg);
           opacity: 0;
         }
       }
@@ -173,15 +182,15 @@
         愿你每一天都像今天一样开心快乐！
       </p>
       <p class="text-sm sm:text-base md:text-lg lg:text-xl text-pink-500 mt-2">
-        请点击小猪
+        请点击小猪或下方按钮
       </p>
     </div>
     
     <!-- 互动按钮 - 响应式设计，增大触摸区域 -->
     <div id="interaction" class="mt-4 sm:mt-6 flex flex-col items-center opacity-0 animate-fade-in w-full px-4">
-      <button id="play-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 z-20 w-full">
-        <i class="fa fa-play text-lg"></i>
-        <span>播放生日歌</span>
+      <button id="wish-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 z-20 w-full">
+        <i class="fa fa-heart text-lg"></i>
+        <span>点击有祝福</span>
       </button>
       <button id="confetti-btn" class="mt-4 bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 z-20 w-full">
         <i class="fa fa-gift text-lg"></i>
@@ -208,26 +217,208 @@
       }
     }
     
-    // 创建彩色纸屑效果
+    // 创建彩色纸屑效果 - 优化版本
     function createConfetti() {
-      const colors = ['#FFB6C1', '#ADD8E6', '#DDA0DD', '#FFFACD', '#98FB98', '#FFB6C1', '#ADD8E6'];
-      const container = document.querySelector('.max-w-4xl');
+      const colors = ['#FFB6C1', '#ADD8E6', '#DDA0DD', '#FFFACD', '#98FB98', '#FF99CC', '#99CCFF', '#FFCC99'];
+      const container = document.querySelector('body'); // 改为body，确保覆盖整个屏幕
       
       // 清除现有纸屑
       const existingConfetti = document.querySelectorAll('.confetti');
       existingConfetti.forEach(confetti => confetti.remove());
       
-      for (let i = 0; i < 100; i++) {
+      // 创建更多彩色纸屑
+      for (let i = 0; i < 150; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.left = `${Math.random() * 100}%`;
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.width = `${Math.random() * 10 + 5}px`;
-        confetti.style.height = `${Math.random() * 10 + 5}px`;
-        confetti.style.animationDelay = `${Math.random() * 5}s`;
-        confetti.style.animationDuration = `${Math.random() * 5 + 5}s`;
+        confetti.style.width = `${Math.random() * 12 + 3}px`;
+        confetti.style.height = `${Math.random() * 12 + 3}px`;
+        confetti.style.animationDelay = `${Math.random() * 3}s`;
+        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
         container.appendChild(confetti);
       }
+    }
+    
+    // 创建边缘小烟花效果
+    function createEdgeFireworks() {
+      const container = document.querySelector('body');
+      const positions = [
+        { left: '5%', top: '5%' },    // 左上
+        { left: '95%', top: '5%' },   // 右上
+        { left: '5%', top: '95%' },   // 左下
+        { left: '95%', top: '95%' },  // 右下
+        { left: '50%', top: '5%' },   // 上中
+        { left: '5%', top: '50%' },   // 左中
+        { left: '95%', top: '50%' },  // 右中
+        { left: '50%', top: '95%' }   // 下中
+      ];
+      
+      const colors = ['#FFB6C1', '#ADD8E6', '#DDA0DD', '#FFFACD', '#98FB98'];
+      
+      positions.forEach((pos, index) => {
+        setTimeout(() => {
+          // 创建烟花主体
+          const firework = document.createElement('div');
+          firework.className = 'absolute rounded-full';
+          firework.style.left = pos.left;
+          firework.style.top = pos.top;
+          firework.style.width = '8px';
+          firework.style.height = '8px';
+          firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          firework.style.transform = 'scale(0)';
+          firework.style.opacity = '0';
+          firework.style.zIndex = '60';
+          container.appendChild(firework);
+          
+          // 烟花上升动画
+          setTimeout(() => {
+            firework.style.transition = 'all 0.5s ease-out';
+            firework.style.transform = 'scale(1)';
+            firework.style.opacity = '1';
+            
+            // 爆炸效果
+            setTimeout(() => {
+              // 移除烟花主体
+              firework.remove();
+              
+              // 创建爆炸粒子
+              for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'absolute rounded-full';
+                particle.style.left = pos.left;
+                particle.style.top = pos.top;
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.opacity = '1';
+                particle.style.zIndex = '60';
+                container.appendChild(particle);
+                
+                // 粒子飞散动画
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 50 + 30;
+                setTimeout(() => {
+                  particle.style.transition = 'all 0.8s ease-out';
+                  particle.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+                  particle.style.opacity = '0';
+                  
+                  // 移除粒子
+                  setTimeout(() => {
+                    particle.remove();
+                  }, 800);
+                }, 10);
+              }
+            }, 500);
+          }, 10);
+        }, index * 300); // 每个烟花间隔300ms
+      });
+    }
+    
+    // 创建烟花效果
+    function createFireworks() {
+      const container = document.querySelector('.max-w-4xl');
+      const colors = ['#FFB6C1', '#ADD8E6', '#DDA0DD', '#FFFACD', '#98FB98', '#FF99CC', '#99CCFF', '#FFCC99'];
+      
+      // 创建5个烟花
+      for (let i = 0; i < 5; i++) {
+        const firework = document.createElement('div');
+        firework.className = 'absolute';
+        firework.style.left = `${Math.random() * 80 + 10}%`;
+        firework.style.top = `${Math.random() * 60 + 20}%`;
+        firework.style.width = '20px';
+        firework.style.height = '20px';
+        firework.style.borderRadius = '50%';
+        firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        firework.style.transform = 'scale(0)';
+        firework.style.opacity = '0';
+        container.appendChild(firework);
+        
+        // 烟花动画
+        setTimeout(() => {
+          firework.style.transition = 'all 0.5s ease-out';
+          firework.style.transform = 'scale(1)';
+          firework.style.opacity = '1';
+          
+          // 爆炸效果
+          setTimeout(() => {
+            firework.style.transition = 'all 0.3s ease-out';
+            firework.style.transform = 'scale(0)';
+            firework.style.opacity = '0';
+            
+            // 创建爆炸碎片
+            for (let j = 0; j < 20; j++) {
+              const fragment = document.createElement('div');
+              fragment.className = 'absolute';
+              fragment.style.left = `${Math.random() * 10 - 5}px`;
+              fragment.style.top = `${Math.random() * 10 - 5}px`;
+              fragment.style.width = `${Math.random() * 6 + 2}px`;
+              fragment.style.height = `${Math.random() * 6 + 2}px`;
+              fragment.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+              fragment.style.transform = 'translate(0, 0) rotate(0deg)';
+              fragment.style.opacity = '1';
+              
+              // 随机碎片方向和旋转
+              const angle = Math.random() * Math.PI * 2;
+              const distance = Math.random() * 50 + 30;
+              const rotation = Math.random() * 360;
+              
+              firework.appendChild(fragment);
+              
+              // 碎片动画
+              setTimeout(() => {
+                fragment.style.transition = 'all 0.8s ease-out';
+                fragment.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) rotate(${rotation}deg)`;
+                fragment.style.opacity = '0';
+                
+                // 移除碎片
+                setTimeout(() => {
+                  fragment.remove();
+                }, 800);
+              }, 10);
+            }
+            
+            // 移除烟花
+            setTimeout(() => {
+              firework.remove();
+            }, 300);
+          }, 500);
+        }, i * 1000);
+      }
+    }
+    
+    // 创建生日快乐文字动画
+    function createBirthdayTextAnimation() {
+      const container = document.querySelector('.max-w-4xl');
+      const texts = ['生日快乐!', 'Happy Birthday!', '🎉🎂🎁', '🎈🎊🎆'];
+      
+      texts.forEach((text, index) => {
+        const textElement = document.createElement('div');
+        textElement.className = 'absolute text-3xl sm:text-4xl md:text-5xl font-bold text-pink-500 text-shadow-lg opacity-0';
+        textElement.style.left = `${Math.random() * 70 + 15}%`;
+        textElement.style.top = `${Math.random() * 60 + 20}%`;
+        textElement.textContent = text;
+        container.appendChild(textElement);
+        
+        // 文字动画
+        setTimeout(() => {
+          textElement.style.transition = 'all 0.5s ease-out';
+          textElement.style.opacity = '1';
+          textElement.style.transform = 'scale(1.2)';
+          
+          // 淡出效果
+          setTimeout(() => {
+            textElement.style.transition = 'all 1s ease-out';
+            textElement.style.opacity = '0';
+            textElement.style.transform = 'scale(0.8) translateY(-20px)';
+            
+            // 移除文字
+            setTimeout(() => {
+              textElement.remove();
+            }, 1000);
+          }, 2000);
+        }, index * 1500);
+      });
     }
     
     // 初始化动画
@@ -253,8 +444,75 @@
     // 全局音频上下文变量
     let audioContext;
     
+    // 测试音频功能（用于首次用户交互）
+    function testAudioOnFirstInteraction() {
+      try {
+        // 创建临时音频上下文测试
+        const tempContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = tempContext.createOscillator();
+        const gainNode = tempContext.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 440; // A4
+        gainNode.gain.value = 0.1;
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(tempContext.destination);
+        
+        oscillator.start();
+        oscillator.stop(tempContext.currentTime + 0.1);
+        
+        console.log('音频测试成功');
+        return true;
+      } catch (error) {
+        console.error('音频测试失败:', error);
+        return false;
+      }
+    }
+    
+    // 播放简单的音效
+    function playSound(frequency = 440, duration = 0.5) {
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        } else if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.value = frequency;
+        
+        // 连接节点
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // 设置音量包络
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.05);
+        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
+        
+        // 开始和停止振荡器
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + duration);
+        
+        return true;
+      } catch (error) {
+        console.error('播放音效失败:', error);
+        return false;
+      }
+    }
+    
     // 播放生日歌
     function playBirthdaySong() {
+      // 首先播放一个简单的音效确认音频功能正常
+      if (!playSound(880, 0.2)) {
+        alert('音频功能无法正常工作，请点击页面任意位置后重试。');
+        return false;
+      }
+      
       // 创建或恢复音频上下文（确保在用户交互后创建）
       try {
         // 如果音频Context已存在但被暂停，则恢复它
@@ -282,7 +540,7 @@
         
         // 创建主音量控制 - 提高音量
         const masterGain = audioContext.createGain();
-        masterGain.gain.value = 0.8; // 提高音量
+        masterGain.gain.value = 0.5; // 适中音量
         masterGain.connect(audioContext.destination);
         
         // 播放音符
@@ -338,64 +596,43 @@
       }
     }
     
-    // 庆祝一下
-    function celebrate() {
-      // 创建庆祝效果
-      createConfetti();
+    // 显示祝福语弹窗（显示图片）
+    function showWishModal() {
+      // 创建弹窗容器
+      const modalContainer = document.createElement('div');
+      modalContainer.className = 'fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70';
       
-      // 播放庆祝音效
-      try {
-        // 使用全局音频上下文
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        } else if (audioContext.state === 'suspended') {
-          audioContext.resume();
-        }
-        
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.value = 1318.51; // E6
-        
-        // 连接节点
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        // 设置音量包络
-        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
-        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
-        
-        // 开始和停止振荡器
-        oscillator.start();
-        oscillator.stop(audioContext.currentTime + 0.5);
-        
-        // 0.5秒后播放高音符
-        setTimeout(() => {
-          try {
-            const oscillator2 = audioContext.createOscillator();
-            const gainNode2 = audioContext.createGain();
-            
-            oscillator2.type = 'sine';
-            oscillator2.frequency.value = 1567.98; // G6
-            
-            oscillator2.connect(gainNode2);
-            gainNode2.connect(audioContext.destination);
-            
-            gainNode2.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode2.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
-            gainNode2.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
-            
-            oscillator2.start();
-            oscillator2.stop(audioContext.currentTime + 0.5);
-          } catch (error) {
-            console.error('播放高音符失败:', error);
-          }
-        }, 500);
-      } catch (error) {
-        console.error('播放庆祝音效失败:', error);
-      }
+      // 创建弹窗内容
+      const modalContent = document.createElement('div');
+      modalContent.className = 'bg-white rounded-lg p-4 max-w-lg w-full mx-4 animate-scale-in';
+      
+      // 创建图片容器
+      const imageContainer = document.createElement('div');
+      imageContainer.className = 'relative w-full';
+      
+      // 创建祝福图片
+      const wishImage = document.createElement('img');
+      wishImage.src = 'https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/40ffe8f6da3f469eaccdd548c5e4188d.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251019145136D1D0078C51223D48D54C&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761461496&x-signature=lB9oBnJSCs5FnT4QeLaFnP%2Bz6wQ%3D';
+      wishImage.alt = '生日祝福图片';
+      wishImage.className = 'w-full rounded-lg';
+      
+      // 创建关闭按钮
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'absolute -top-4 -right-4 bg-red-500 hover:bg-red-600 text-white font-bold w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-300';
+      closeBtn.innerHTML = '<i class="fa fa-times"></i>';
+      closeBtn.addEventListener('click', () => {
+        modalContainer.remove();
+      });
+      
+      // 组装弹窗
+      imageContainer.appendChild(wishImage);
+      imageContainer.appendChild(closeBtn);
+      modalContent.appendChild(imageContainer);
+      modalContainer.appendChild(modalContent);
+      document.body.appendChild(modalContainer);
+      
+      // 播放提示音效
+      playSound(880, 0.3);
       
       // 小猪动画效果
       const pig = document.getElementById('pig');
@@ -407,6 +644,117 @@
       }, 2000);
     }
     
+    // 播放完整生日音乐
+    function playFullBirthdaySong() {
+      try {
+        // 首先播放一个简单的音效确认音频功能正常
+        if (!playSound(880, 0.2)) {
+          console.log('音频功能无法正常工作');
+          return false;
+        }
+        
+        // 创建或恢复音频上下文（确保在用户交互后创建）
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        } else if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        
+        // 完整生日歌旋律
+        const notes = [
+          // 第一段
+          {note: 'C4', time: 0}, {note: 'C4', time: 0.5}, {note: 'D4', time: 1}, {note: 'C4', time: 1.5}, {note: 'F4', time: 2}, {note: 'E4', time: 2.5},
+          {note: 'C4', time: 3}, {note: 'C4', time: 3.5}, {note: 'D4', time: 4}, {note: 'C4', time: 4.5}, {note: 'G4', time: 5}, {note: 'F4', time: 5.5},
+          {note: 'C4', time: 6}, {note: 'C4', time: 6.5}, {note: 'C5', time: 7}, {note: 'A4', time: 7.5}, {note: 'F4', time: 8}, {note: 'E4', time: 8.5}, {note: 'D4', time: 9},
+          {note: 'Bb4', time: 9.5}, {note: 'Bb4', time: 10}, {note: 'A4', time: 10.5}, {note: 'F4', time: 11}, {note: 'G4', time: 11.5}, {note: 'F4', time: 12},
+          
+          // 第二段（重复）
+          {note: 'C4', time: 12.5}, {note: 'C4', time: 13}, {note: 'D4', time: 13.5}, {note: 'C4', time: 14}, {note: 'F4', time: 14.5}, {note: 'E4', time: 15},
+          {note: 'C4', time: 15.5}, {note: 'C4', time: 16}, {note: 'D4', time: 16.5}, {note: 'C4', time: 17}, {note: 'G4', time: 17.5}, {note: 'F4', time: 18},
+          {note: 'C4', time: 18.5}, {note: 'C4', time: 19}, {note: 'C5', time: 19.5}, {note: 'A4', time: 20}, {note: 'F4', time: 20.5}, {note: 'E4', time: 21}, {note: 'D4', time: 21.5},
+          {note: 'G4', time: 22}, {note: 'G4', time: 22.5}, {note: 'F4', time: 23}, {note: 'E4', time: 23.5}, {note: 'D4', time: 24}, {note: 'C4', time: 24.5}
+        ];
+        
+        // 音符频率映射
+        const noteFrequencies = {
+          'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'Bb4': 466.16, 'C5': 523.25
+        };
+        
+        // 创建主音量控制
+        const masterGain = audioContext.createGain();
+        masterGain.gain.value = 0.5; // 适中音量
+        masterGain.connect(audioContext.destination);
+        
+        // 播放音符
+        notes.forEach((noteObj) => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.type = 'sine';
+          oscillator.frequency.value = noteFrequencies[noteObj.note];
+          
+          // 连接节点
+          oscillator.connect(gainNode);
+          gainNode.connect(masterGain);
+          
+          // 设置音量包络
+          const now = audioContext.currentTime + noteObj.time * 0.4; // 调整节奏
+          gainNode.gain.setValueAtTime(0, now);
+          gainNode.gain.linearRampToValueAtTime(1, now + 0.05);
+          gainNode.gain.linearRampToValueAtTime(0.9, now + 0.25);
+          gainNode.gain.linearRampToValueAtTime(0, now + 0.35);
+          
+          // 开始和停止振荡器
+          oscillator.start(now);
+          oscillator.stop(now + 0.35);
+        });
+        
+        return true;
+      } catch (error) {
+        console.error('播放生日音乐失败:', error);
+        return false;
+      }
+    }
+    
+    // 庆祝一下（完整版）
+    function celebrate() {
+      console.log('庆祝一下功能被调用');
+      
+      // 创建彩色纸屑
+      createConfetti();
+      
+      // 创建边缘小烟花
+      createEdgeFireworks();
+      
+      // 播放完整生日音乐
+      playFullBirthdaySong();
+      
+      // 小猪动画效果
+      const pig = document.getElementById('pig');
+      if (pig) {
+        pig.classList.add('animate-sparkle');
+        setTimeout(() => {
+          pig.classList.remove('animate-sparkle');
+        }, 10000); // 延长动画时间，与音乐同步
+      }
+      
+      // 添加屏幕闪烁效果
+      const overlay = document.createElement('div');
+      overlay.className = 'fixed inset-0 bg-white opacity-0 z-60 pointer-events-none';
+      document.body.appendChild(overlay);
+      
+      setTimeout(() => {
+        overlay.style.transition = 'opacity 0.1s';
+        overlay.style.opacity = '0.3';
+        setTimeout(() => {
+          overlay.style.opacity = '0';
+          setTimeout(() => {
+            overlay.remove();
+          }, 100);
+        }, 100);
+      }, 10);
+    }
+    
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', () => {
       console.log('页面加载完成，初始化动画和事件监听');
@@ -415,28 +763,102 @@
       initAnimation();
       
       // 添加按钮事件监听
-      const playBtn = document.getElementById('play-btn');
+      const wishBtn = document.getElementById('wish-btn');
       const confettiBtn = document.getElementById('confetti-btn');
       
-      if (playBtn) {
-        playBtn.addEventListener('click', () => {
-          console.log('播放生日歌按钮被点击');
+      // 为了确保按钮可点击，添加一个简单的点击效果
+      const addButtonClickEffect = (button) => {
+        if (button) {
+          button.style.cursor = 'pointer';
+          button.addEventListener('mousedown', () => {
+            button.style.transform = 'scale(0.95)';
+          });
+          button.addEventListener('mouseup', () => {
+            button.style.transform = 'scale(1)';
+          });
+          button.addEventListener('mouseleave', () => {
+            button.style.transform = 'scale(1)';
+          });
+          button.addEventListener('touchstart', () => {
+            button.style.transform = 'scale(0.95)';
+          });
+          button.addEventListener('touchend', () => {
+            button.style.transform = 'scale(1)';
+          });
+        }
+      };
+      
+      // 添加按钮点击效果
+      addButtonClickEffect(wishBtn);
+      addButtonClickEffect(confettiBtn);
+      
+      if (wishBtn) {
+        wishBtn.addEventListener('click', () => {
+          console.log('点击有祝福按钮被点击');
           // 首次点击时进行音频测试
           testAudioOnFirstInteraction();
-          const result = playBirthdaySong();
-          if (!result) {
-            // 如果Web Audio API失败，显示一个简单的庆祝效果
-            celebrate();
+          try {
+            showWishModal();
+          } catch (error) {
+            console.error('显示祝福窗口失败:', error);
+            // 降级处理 - 显示简单的alert
+            alert('愿你每一天都像今天一样开心快乐！');
           }
         });
+      } else {
+        console.error('未找到wish-btn元素');
+        // 添加降级处理 - 直接在页面上显示提示
+        setTimeout(() => {
+          const message = document.createElement('div');
+          message.className = 'fixed bottom-4 left-0 right-0 text-center text-red-500';
+          message.textContent = '按钮加载失败，请点击小猪图片获取祝福';
+          document.body.appendChild(message);
+        }, 3000);
       }
       
-      if (confettiBtn) {
-        confettiBtn.addEventListener('click', () => {
-          console.log('庆祝一下按钮被点击');
-          celebrate();
-        });
-      }
+      // 改进庆祝庆祝按钮事件绑定
+      const bindCelebrateButton = () => {
+        const confettiBtn = document.getElementById('confetti-btn');
+        
+        if (confettiBtn) {
+          console.log('找到庆祝按钮，绑定事件');
+          
+          // 移除可能存在的旧事件监听器
+          confettiBtn.replaceWith(confettiBtn.cloneNode(true));
+          const newConfettiBtn = document.getElementById('confetti-btn');
+          
+          // 重新绑定事件
+          newConfettiBtn.addEventListener('click', function(e) {
+            console.log('庆祝按钮被点击');
+            e.stopPropagation();
+            celebrate();
+          });
+          
+          // 添加触摸事件支持
+          newConfettiBtn.addEventListener('touchstart', function(e) {
+            console.log('庆祝按钮被触摸');
+            e.stopPropagation();
+            celebrate();
+          });
+          
+          // 添加点击视觉反馈
+          addButtonClickEffect(newConfettiBtn);
+        } else {
+          console.error('未找到confetti-btn元素');
+          
+          // 创建备用按钮
+          setTimeout(() => {
+            const fallbackBtn = document.createElement('button');
+            fallbackBtn.textContent = '庆祝一下下 (备用)';
+            fallbackBtn.className = 'mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all duration-300 z-20 w-full';
+            fallbackBtn.addEventListener('click', celebrate);
+            document.getElementById('interaction').appendChild(fallbackBtn);
+          }, 1000);
+        }
+      };
+      
+      // 绑定庆祝按钮事件
+      bindCelebrateButton();
       
       // 添加键盘交互
       document.addEventListener('keydown', (e) => {
@@ -444,25 +866,64 @@
         if (e.key === ' ' || e.key === 'Enter') {
           // 首次按下时进行音频测试
           testAudioOnFirstInteraction();
-          playBirthdaySong();
+          try {
+            showWishModal();
+          } catch (error) {
+            console.error('键盘触发发窗口失败:', error);
+            alert('愿你每一天都像今天一样开心快乐！');
+          }
         } else if (e.key === 'f') {
-          celebrate();
+          try {
+            celebrate();
+          } catch (error) {
+            console.error('键盘庆祝效果执行失败:', error);
+            createConfetti();
+          }
         }
       });
       
-      // 添加触摸交互
+      // 添加触摸交互 - 点击小猪图片会上下跳一下
       const pigContainer = document.getElementById('pig-container');
-      if (pigContainer) {
+      const pigImage = document.getElementById('pig');
+      if (pigContainer && pigImage) {
+        pigContainer.style.cursor = 'pointer';
         pigContainer.addEventListener('click', () => {
           console.log('小猪图片被点击');
-          // 首次点击时进行音频测试
-          testAudioOnFirstInteraction();
-          playBirthdaySong();
-          setTimeout(celebrate, 1000);
+          // 移除float动画
+          pigImage.classList.remove('animate-float');
+          // 添加弹跳动画
+          pigImage.classList.add('animate-bounce');
+          // 播放弹跳音效
+          playSound(440, 0.2);
+          // 0.5秒后恢复float动画
+          setTimeout(() => {
+            pigImage.classList.remove('animate-bounce');
+            pigImage.classList.add('animate-float');
+          }, 500);
         });
       }
       
-      // 音频测试移到用户交互后进行，避免浏览器阻止
+      // 添加页面点击事件，用于激活音频
+      document.addEventListener('click', function initAudio() {
+        console.log('页面被点击，尝试激活音频');
+        try {
+          testAudioOnFirstInteraction();
+        } catch (error) {
+          console.error('音频初始化失败:', error);
+        }
+        // 移除事件监听器，避免重复调用
+        document.removeEventListener('click', initAudio);
+      }, { once: true });
+      
+      // 添加一个简单的测试按钮，用于调试
+      const testButton = document.createElement('button');
+      testButton.textContent = '测试';
+      testButton.className = 'fixed bottom-2 left-2 bg-gray-200 text-black px-2 py-1 rounded text-xs z-50';
+      testButton.addEventListener('click', () => {
+        alert('页面交互正常！');
+        console.log('测试按钮被点击');
+      });
+      document.body.appendChild(testButton);
     });
   </script>
 </body>
