@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>陈思羽生日快乐 - HDMI风格</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'hdmi-blue': '#0071C5',
+            'hdmi-red': '#E60012',
+            'hdmi-green': '#00A86B',
+            'hdmi-yellow': '#FFD100',
+            'pastel-pink': '#FFB6C1',
+            'pastel-blue': '#ADD8E6',
+            'pastel-purple': '#DDA0DD',
+            'pastel-yellow': '#FFFACD',
+            'pastel-green': '#98FB98'
+          },
+          fontFamily: {
+            sans: ['Arial', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'sparkle': 'sparkle 2s ease-in-out infinite',
+            'fade-in': 'fadeIn 1s ease-in-out',
+            'scale-in': 'scaleIn 0.5s ease-out',
+            'slide-in': 'slideIn 0.8s ease-out',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            sparkle: {
+              '0%, 100%': { opacity: 1, transform: 'scale(1)' },
+              '50%': { opacity: 0.7, transform: 'scale(1.1)' },
+            },
+            fadeIn: {
+              '0%': { opacity: 0 },
+              '100%': { opacity: 1 },
+            },
+            scaleIn: {
+              '0%': { transform: 'scale(0.8)', opacity: 0 },
+              '100%': { transform: 'scale(1)', opacity: 1 },
+            },
+            slideIn: {
+              '0%': { transform: 'translateY(30px)', opacity: 0 },
+              '100%': { transform: 'translateY(0)', opacity: 1 },
+            },
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .text-shadow-lg {
+        text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+      .text-shadow-neon {
+        text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+      }
+      .border-gradient {
+        border-image: linear-gradient(to right, theme('colors.hdmi-blue'), theme('colors.hdmi-red'), theme('colors.hdmi-green'), theme('colors.hdmi-yellow')) 1;
+      }
+      .bg-pattern {
+        background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+      .hdmi-overlay {
+        background: linear-gradient(135deg, rgba(0,113,197,0.1) 0%, rgba(230,0,18,0.1) 25%, rgba(0,168,107,0.1) 50%, rgba(255,209,0,0.1) 75%);
+      }
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        opacity: 0;
+        animation: confetti 5s ease-in-out infinite;
+      }
+      @keyframes confetti {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+      .candle-flame {
+        animation: flame 1s ease-in-out infinite alternate;
+      }
+      @keyframes flame {
+        0% {
+          transform: scale(1) rotate(2deg);
+        }
+        100% {
+          transform: scale(1.1) rotate(-2deg);
+        }
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- HDMI风格边框 - 响应式设计 -->
+  <div class="fixed inset-0 border-4 sm:border-8 border-hdmi-blue z-50 pointer-events-none"></div>
+  <div class="fixed inset-1 sm:inset-2 border-2 sm:border-4 border-hdmi-red z-50 pointer-events-none"></div>
+  <div class="fixed inset-3 sm:inset-6 border-1 sm:border-2 border-hdmi-green z-50 pointer-events-none"></div>
+  <div class="fixed inset-4 sm:inset-8 border border-hdmi-yellow z-50 pointer-events-none"></div>
+  
+  <!-- 主容器 - 响应式设计 -->
+  <div class="relative w-full max-w-md sm:max-w-4xl aspect-[9/16] sm:aspect-video bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col items-center justify-start p-4 z-10">
+    <!-- 背景图案 -->
+    <div class="absolute inset-0 bg-pattern opacity-20"></div>
+    
+    <!-- HDMI标志 - 响应式设计 -->
+    <div class="absolute top-2 left-2 flex items-center space-x-1.5 bg-black text-pink-300 px-2 py-0.5 rounded-full text-xs opacity-70">
+      <div class="flex space-x-1">
+        <div class="w-2 h-2 rounded-full bg-hdmi-blue"></div>
+        <div class="w-2 h-2 rounded-full bg-hdmi-red"></div>
+        <div class="w-2 h-2 rounded-full bg-hdmi-green"></div>
+        <div class="w-2 h-2 rounded-full bg-hdmi-yellow"></div>
+      </div>
+      <span>HDMI</span>
+    </div>
+    
+    <!-- 分辨率指示器 - 响应式设计 -->
+    <div class="absolute top-2 right-2 bg-black text-pink-300 px-2 py-0.5 rounded-full text-xs opacity-70">
+      1080x1920p 60Hz
+    </div>
+    
+    <!-- 顶部装饰 -->
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-hdmi-blue via-hdmi-red via-hdmi-green to-hdmi-yellow"></div>
+    
+    <!-- 标题 - 响应式设计 -->
+    <div id="title" class="mt-4 sm:mt-8 text-center w-full opacity-0 animate-slide-in">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-pink-500 text-shadow-lg tracking-widest">
+        <span class="text-pink-500">祝</span>
+        <span class="text-pink-500">陈</span>
+        <span class="text-pink-500">思</span>
+        <span class="text-pink-500">羽</span>
+        <span class="text-pink-500">生</span>
+        <span class="text-pink-500">日</span>
+        <span class="text-pink-500">快</span>
+        <span class="text-pink-500">乐</span>
+        <span class="text-pink-500">！</span>
+      </h1>
+    </div>
+    
+    <!-- 小猪 - 响应式设计 -->
+    <div id="pig-container" class="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-64 lg:h-64 my-4 opacity-0 animate-scale-in">
+      <img id="pig" src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/2c7a6b1c5288494d9f2d76b6d1d1b7eb.jpg~tplv-a9rns2rl98-24:720:720.image?rcl=202510191237436A5C2CC2F0524D04CF1D&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761453463&x-signature=z724zow5BA4Nt9Sw050p%2FRNmxCY%3D" 
+           alt="可爱小猪" 
+           class="w-full h-full object-contain filter drop-shadow-xl animate-float">
+    </div>
+    
+    <!-- 祝福语 - 响应式设计 -->
+    <div id="message" class="text-center px-4 opacity-0 animate-slide-in">
+      <p class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-pink-500">
+        愿你每一天都像今天一样开心快乐！
+      </p>
+      <p class="text-sm sm:text-base md:text-lg lg:text-xl text-pink-500 mt-2">
+        请点击小猪
+      </p>
+    </div>
+    
+    <!-- 互动按钮 - 响应式设计，增大触摸区域 -->
+    <div id="interaction" class="mt-4 sm:mt-6 flex flex-col items-center opacity-0 animate-fade-in w-full px-4">
+      <button id="play-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 z-20 w-full">
+        <i class="fa fa-play text-lg"></i>
+        <span>播放生日歌</span>
+      </button>
+      <button id="confetti-btn" class="mt-4 bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 z-20 w-full">
+        <i class="fa fa-gift text-lg"></i>
+        <span>庆祝一下</span>
+      </button>
+    </div>
+    
+    <!-- 底部装饰 -->
+    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-hdmi-yellow via-hdmi-green via-hdmi-red to-hdmi-blue"></div>
+    
+    <!-- 扫描线效果 -->
+    <div class="fixed inset-0 pointer-events-none z-20" id="scanlines"></div>
+  </div>
+  
+  <script>
+    // 创建扫描线效果
+    function createScanlines() {
+      const scanlines = document.getElementById('scanlines');
+      for (let i = 0; i < 100; i++) {
+        const line = document.createElement('div');
+        line.className = 'absolute w-full h-0.5 bg-white opacity-10';
+        line.style.top = `${i}%`;
+        scanlines.appendChild(line);
+      }
+    }
+    
+    // 创建彩色纸屑效果
+    function createConfetti() {
+      const colors = ['#FFB6C1', '#ADD8E6', '#DDA0DD', '#FFFACD', '#98FB98', '#FFB6C1', '#ADD8E6'];
+      const container = document.querySelector('.max-w-4xl');
+      
+      // 清除现有纸屑
+      const existingConfetti = document.querySelectorAll('.confetti');
+      existingConfetti.forEach(confetti => confetti.remove());
+      
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = `${Math.random() * 10 + 5}px`;
+        confetti.style.height = `${Math.random() * 10 + 5}px`;
+        confetti.style.animationDelay = `${Math.random() * 5}s`;
+        confetti.style.animationDuration = `${Math.random() * 5 + 5}s`;
+        container.appendChild(confetti);
+      }
+    }
+    
+    // 初始化动画
+    function initAnimation() {
+      // 延迟显示元素，创建序列动画效果
+      setTimeout(() => {
+        document.getElementById('title').style.opacity = '1';
+      }, 500);
+      
+      setTimeout(() => {
+        document.getElementById('pig-container').style.opacity = '1';
+      }, 1000);
+      
+      setTimeout(() => {
+        document.getElementById('message').style.opacity = '1';
+      }, 1500);
+      
+      setTimeout(() => {
+        document.getElementById('interaction').style.opacity = '1';
+      }, 2000);
+    }
+    
+    // 全局音频上下文变量
+    let audioContext;
+    
+    // 播放生日歌
+    function playBirthdaySong() {
+      // 创建或恢复音频上下文（确保在用户交互后创建）
+      try {
+        // 如果音频Context已存在但被暂停，则恢复它
+        if (audioContext) {
+          if (audioContext.state === 'suspended') {
+            audioContext.resume();
+          }
+        } else {
+          // 首次创建音频上下文
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        // 简化版生日歌旋律 - 使用更简单的音符序列
+        const notes = [
+          {note: 'C4', time: 0}, {note: 'C4', time: 0.5}, {note: 'D4', time: 1}, {note: 'C4', time: 1.5}, {note: 'F4', time: 2}, {note: 'E4', time: 2.5},
+          {note: 'C4', time: 3}, {note: 'C4', time: 3.5}, {note: 'D4', time: 4}, {note: 'C4', time: 4.5}, {note: 'G4', time: 5}, {note: 'F4', time: 5.5},
+          {note: 'C4', time: 6}, {note: 'C4', time: 6.5}, {note: 'C5', time: 7}, {note: 'A4', time: 7.5}, {note: 'F4', time: 8}, {note: 'E4', time: 8.5}, {note: 'D4', time: 9},
+          {note: 'Bb4', time: 9.5}, {note: 'Bb4', time: 10}, {note: 'A4', time: 10.5}, {note: 'F4', time: 11}, {note: 'G4', time: 11.5}, {note: 'F4', time: 12}
+        ];
+        
+        // 音符频率映射
+        const noteFrequencies = {
+          'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'Bb4': 466.16, 'C5': 523.25
+        };
+        
+        // 创建主音量控制 - 提高音量
+        const masterGain = audioContext.createGain();
+        masterGain.gain.value = 0.8; // 提高音量
+        masterGain.connect(audioContext.destination);
+        
+        // 播放音符
+        notes.forEach((noteObj) => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.type = 'sine';
+          oscillator.frequency.value = noteFrequencies[noteObj.note];
+          
+          // 连接节点
+          oscillator.connect(gainNode);
+          gainNode.connect(masterGain);
+          
+          // 设置音量包络 - 简化包包络，使音符更清晰
+          const now = audioContext.currentTime + noteObj.time * 0.4; // 调整节奏
+          gainNode.gain.setValueAtTime(0, now);
+          gainNode.gain.linearRampToValueAtTime(1, now + 0.05);
+          gainNode.gain.linearRampToValueAtTime(0.9, now + 0.25);
+          gainNode.gain.linearRampToValueAtTime(0, now + 0.35);
+          
+          // 开始和停止振荡器
+          oscillator.start(now);
+          oscillator.stop(now + 0.35);
+        });
+        
+        // 显示动画效果
+        const pig = document.getElementById('pig');
+        pig.classList.add('animate-sparkle');
+        
+        // 8秒后移除动画类
+        setTimeout(() => {
+          pig.classList.remove('animate-sparkle');
+        }, 8000);
+        
+        // 播放完毕后显示庆祝效果
+        setTimeout(() => {
+          celebrate();
+        }, 8000);
+        
+        return true;
+      } catch (error) {
+        console.error('播放生日歌失败:', error);
+        // 显示更详细的错误信息
+        if (error.name === 'NotAllowedError') {
+          alert('音频播放功能失败: 浏览器阻止了音频播放。请先点击页面任意处激活音频，然后再尝试播放生日歌。');
+        } else if (error.name === 'InvalidStateError') {
+          alert('音频播放功能失败: 音频上下文已被暂停。请先点击一次播放生日歌按钮重试。');
+        } else {
+          alert(`播放生日歌失败: ${error.message}。请尝试点击页面其他地方后再试。`);
+        }
+        return false;
+      }
+    }
+    
+    // 庆祝一下
+    function celebrate() {
+      // 创建庆祝效果
+      createConfetti();
+      
+      // 播放庆祝音效
+      try {
+        // 使用全局音频上下文
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        } else if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 1318.51; // E6
+        
+        // 连接节点
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // 设置音量包络
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+        
+        // 开始和停止振荡器
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.5);
+        
+        // 0.5秒后播放高音符
+        setTimeout(() => {
+          try {
+            const oscillator2 = audioContext.createOscillator();
+            const gainNode2 = audioContext.createGain();
+            
+            oscillator2.type = 'sine';
+            oscillator2.frequency.value = 1567.98; // G6
+            
+            oscillator2.connect(gainNode2);
+            gainNode2.connect(audioContext.destination);
+            
+            gainNode2.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode2.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
+            gainNode2.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+            
+            oscillator2.start();
+            oscillator2.stop(audioContext.currentTime + 0.5);
+          } catch (error) {
+            console.error('播放高音符失败:', error);
+          }
+        }, 500);
+      } catch (error) {
+        console.error('播放庆祝音效失败:', error);
+      }
+      
+      // 小猪动画效果
+      const pig = document.getElementById('pig');
+      pig.classList.add('animate-sparkle');
+      
+      // 2秒后移除动画类
+      setTimeout(() => {
+        pig.classList.remove('animate-sparkle');
+      }, 2000);
+    }
+    
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('页面加载完成，初始化动画和事件监听');
+      
+      createScanlines();
+      initAnimation();
+      
+      // 添加按钮事件监听
+      const playBtn = document.getElementById('play-btn');
+      const confettiBtn = document.getElementById('confetti-btn');
+      
+      if (playBtn) {
+        playBtn.addEventListener('click', () => {
+          console.log('播放生日歌按钮被点击');
+          // 首次点击时进行音频测试
+          testAudioOnFirstInteraction();
+          const result = playBirthdaySong();
+          if (!result) {
+            // 如果Web Audio API失败，显示一个简单的庆祝效果
+            celebrate();
+          }
+        });
+      }
+      
+      if (confettiBtn) {
+        confettiBtn.addEventListener('click', () => {
+          console.log('庆祝一下按钮被点击');
+          celebrate();
+        });
+      }
+      
+      // 添加键盘交互
+      document.addEventListener('keydown', (e) => {
+        console.log('键盘按键被按下:', e.key);
+        if (e.key === ' ' || e.key === 'Enter') {
+          // 首次按下时进行音频测试
+          testAudioOnFirstInteraction();
+          playBirthdaySong();
+        } else if (e.key === 'f') {
+          celebrate();
+        }
+      });
+      
+      // 添加触摸交互
+      const pigContainer = document.getElementById('pig-container');
+      if (pigContainer) {
+        pigContainer.addEventListener('click', () => {
+          console.log('小猪图片被点击');
+          // 首次点击时进行音频测试
+          testAudioOnFirstInteraction();
+          playBirthdaySong();
+          setTimeout(celebrate, 1000);
+        });
+      }
+      
+      // 音频测试移到用户交互后进行，避免浏览器阻止
+    });
+  </script>
+</body>
+</html>
