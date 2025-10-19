@@ -441,161 +441,6 @@
       }, 2000);
     }
     
-    // 全局音频上下文变量
-    let audioContext;
-    
-    // 测试音频功能（用于首次用户交互）
-    function testAudioOnFirstInteraction() {
-      try {
-        // 创建临时音频上下文测试
-        const tempContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = tempContext.createOscillator();
-        const gainNode = tempContext.createGain();
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.value = 440; // A4
-        gainNode.gain.value = 0.1;
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(tempContext.destination);
-        
-        oscillator.start();
-        oscillator.stop(tempContext.currentTime + 0.1);
-        
-        console.log('音频测试成功');
-        return true;
-      } catch (error) {
-        console.error('音频测试失败:', error);
-        return false;
-      }
-    }
-    
-    // 播放简单的音效
-    function playSound(frequency = 440, duration = 0.5) {
-      try {
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        } else if (audioContext.state === 'suspended') {
-          audioContext.resume();
-        }
-        
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.value = frequency;
-        
-        // 连接节点
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        // 设置音量包络
-        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.05);
-        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
-        
-        // 开始和停止振荡器
-        oscillator.start();
-        oscillator.stop(audioContext.currentTime + duration);
-        
-        return true;
-      } catch (error) {
-        console.error('播放音效失败:', error);
-        return false;
-      }
-    }
-    
-    // 播放生日歌
-    function playBirthdaySong() {
-      // 首先播放一个简单的音效确认音频功能正常
-      if (!playSound(880, 0.2)) {
-        alert('音频功能无法正常工作，请点击页面任意位置后重试。');
-        return false;
-      }
-      
-      // 创建或恢复音频上下文（确保在用户交互后创建）
-      try {
-        // 如果音频Context已存在但被暂停，则恢复它
-        if (audioContext) {
-          if (audioContext.state === 'suspended') {
-            audioContext.resume();
-          }
-        } else {
-          // 首次创建音频上下文
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        
-        // 简化版生日歌旋律 - 使用更简单的音符序列
-        const notes = [
-          {note: 'C4', time: 0}, {note: 'C4', time: 0.5}, {note: 'D4', time: 1}, {note: 'C4', time: 1.5}, {note: 'F4', time: 2}, {note: 'E4', time: 2.5},
-          {note: 'C4', time: 3}, {note: 'C4', time: 3.5}, {note: 'D4', time: 4}, {note: 'C4', time: 4.5}, {note: 'G4', time: 5}, {note: 'F4', time: 5.5},
-          {note: 'C4', time: 6}, {note: 'C4', time: 6.5}, {note: 'C5', time: 7}, {note: 'A4', time: 7.5}, {note: 'F4', time: 8}, {note: 'E4', time: 8.5}, {note: 'D4', time: 9},
-          {note: 'Bb4', time: 9.5}, {note: 'Bb4', time: 10}, {note: 'A4', time: 10.5}, {note: 'F4', time: 11}, {note: 'G4', time: 11.5}, {note: 'F4', time: 12}
-        ];
-        
-        // 音符频率映射
-        const noteFrequencies = {
-          'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'Bb4': 466.16, 'C5': 523.25
-        };
-        
-        // 创建主音量控制 - 提高音量
-        const masterGain = audioContext.createGain();
-        masterGain.gain.value = 0.5; // 适中音量
-        masterGain.connect(audioContext.destination);
-        
-        // 播放音符
-        notes.forEach((noteObj) => {
-          const oscillator = audioContext.createOscillator();
-          const gainNode = audioContext.createGain();
-          
-          oscillator.type = 'sine';
-          oscillator.frequency.value = noteFrequencies[noteObj.note];
-          
-          // 连接节点
-          oscillator.connect(gainNode);
-          gainNode.connect(masterGain);
-          
-          // 设置音量包络 - 简化包包络，使音符更清晰
-          const now = audioContext.currentTime + noteObj.time * 0.4; // 调整节奏
-          gainNode.gain.setValueAtTime(0, now);
-          gainNode.gain.linearRampToValueAtTime(1, now + 0.05);
-          gainNode.gain.linearRampToValueAtTime(0.9, now + 0.25);
-          gainNode.gain.linearRampToValueAtTime(0, now + 0.35);
-          
-          // 开始和停止振荡器
-          oscillator.start(now);
-          oscillator.stop(now + 0.35);
-        });
-        
-        // 显示动画效果
-        const pig = document.getElementById('pig');
-        pig.classList.add('animate-sparkle');
-        
-        // 8秒后移除动画类
-        setTimeout(() => {
-          pig.classList.remove('animate-sparkle');
-        }, 8000);
-        
-        // 播放完毕后显示庆祝效果
-        setTimeout(() => {
-          celebrate();
-        }, 8000);
-        
-        return true;
-      } catch (error) {
-        console.error('播放生日歌失败:', error);
-        // 显示更详细的错误信息
-        if (error.name === 'NotAllowedError') {
-          alert('音频播放功能失败: 浏览器阻止了音频播放。请先点击页面任意处激活音频，然后再尝试播放生日歌。');
-        } else if (error.name === 'InvalidStateError') {
-          alert('音频播放功能失败: 音频上下文已被暂停。请先点击一次播放生日歌按钮重试。');
-        } else {
-          alert(`播放生日歌失败: ${error.message}。请尝试点击页面其他地方后再试。`);
-        }
-        return false;
-      }
-    }
-    
     // 显示祝福语弹窗（显示图片）
     function showWishModal() {
       // 创建弹窗容器
@@ -631,9 +476,6 @@
       modalContainer.appendChild(modalContent);
       document.body.appendChild(modalContainer);
       
-      // 播放提示音效
-      playSound(880, 0.3);
-      
       // 小猪动画效果
       const pig = document.getElementById('pig');
       pig.classList.add('animate-sparkle');
@@ -642,78 +484,6 @@
       setTimeout(() => {
         pig.classList.remove('animate-sparkle');
       }, 2000);
-    }
-    
-    // 播放完整生日音乐
-    function playFullBirthdaySong() {
-      try {
-        // 首先播放一个简单的音效确认音频功能正常
-        if (!playSound(880, 0.2)) {
-          console.log('音频功能无法正常工作');
-          return false;
-        }
-        
-        // 创建或恢复音频上下文（确保在用户交互后创建）
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        } else if (audioContext.state === 'suspended') {
-          audioContext.resume();
-        }
-        
-        // 完整生日歌旋律
-        const notes = [
-          // 第一段
-          {note: 'C4', time: 0}, {note: 'C4', time: 0.5}, {note: 'D4', time: 1}, {note: 'C4', time: 1.5}, {note: 'F4', time: 2}, {note: 'E4', time: 2.5},
-          {note: 'C4', time: 3}, {note: 'C4', time: 3.5}, {note: 'D4', time: 4}, {note: 'C4', time: 4.5}, {note: 'G4', time: 5}, {note: 'F4', time: 5.5},
-          {note: 'C4', time: 6}, {note: 'C4', time: 6.5}, {note: 'C5', time: 7}, {note: 'A4', time: 7.5}, {note: 'F4', time: 8}, {note: 'E4', time: 8.5}, {note: 'D4', time: 9},
-          {note: 'Bb4', time: 9.5}, {note: 'Bb4', time: 10}, {note: 'A4', time: 10.5}, {note: 'F4', time: 11}, {note: 'G4', time: 11.5}, {note: 'F4', time: 12},
-          
-          // 第二段（重复）
-          {note: 'C4', time: 12.5}, {note: 'C4', time: 13}, {note: 'D4', time: 13.5}, {note: 'C4', time: 14}, {note: 'F4', time: 14.5}, {note: 'E4', time: 15},
-          {note: 'C4', time: 15.5}, {note: 'C4', time: 16}, {note: 'D4', time: 16.5}, {note: 'C4', time: 17}, {note: 'G4', time: 17.5}, {note: 'F4', time: 18},
-          {note: 'C4', time: 18.5}, {note: 'C4', time: 19}, {note: 'C5', time: 19.5}, {note: 'A4', time: 20}, {note: 'F4', time: 20.5}, {note: 'E4', time: 21}, {note: 'D4', time: 21.5},
-          {note: 'G4', time: 22}, {note: 'G4', time: 22.5}, {note: 'F4', time: 23}, {note: 'E4', time: 23.5}, {note: 'D4', time: 24}, {note: 'C4', time: 24.5}
-        ];
-        
-        // 音符频率映射
-        const noteFrequencies = {
-          'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'Bb4': 466.16, 'C5': 523.25
-        };
-        
-        // 创建主音量控制
-        const masterGain = audioContext.createGain();
-        masterGain.gain.value = 0.5; // 适中音量
-        masterGain.connect(audioContext.destination);
-        
-        // 播放音符
-        notes.forEach((noteObj) => {
-          const oscillator = audioContext.createOscillator();
-          const gainNode = audioContext.createGain();
-          
-          oscillator.type = 'sine';
-          oscillator.frequency.value = noteFrequencies[noteObj.note];
-          
-          // 连接节点
-          oscillator.connect(gainNode);
-          gainNode.connect(masterGain);
-          
-          // 设置音量包络
-          const now = audioContext.currentTime + noteObj.time * 0.4; // 调整节奏
-          gainNode.gain.setValueAtTime(0, now);
-          gainNode.gain.linearRampToValueAtTime(1, now + 0.05);
-          gainNode.gain.linearRampToValueAtTime(0.9, now + 0.25);
-          gainNode.gain.linearRampToValueAtTime(0, now + 0.35);
-          
-          // 开始和停止振荡器
-          oscillator.start(now);
-          oscillator.stop(now + 0.35);
-        });
-        
-        return true;
-      } catch (error) {
-        console.error('播放生日音乐失败:', error);
-        return false;
-      }
     }
     
     // 庆祝一下（完整版）
@@ -726,8 +496,11 @@
       // 创建边缘小烟花
       createEdgeFireworks();
       
-      // 播放完整生日音乐
-      playFullBirthdaySong();
+      // 创建中心烟花
+      createFireworks();
+      
+      // 创建生日快乐文字动画
+      createBirthdayTextAnimation();
       
       // 小猪动画效果
       const pig = document.getElementById('pig');
@@ -735,7 +508,7 @@
         pig.classList.add('animate-sparkle');
         setTimeout(() => {
           pig.classList.remove('animate-sparkle');
-        }, 10000); // 延长动画时间，与音乐同步
+        }, 5000); // 调整动画时间
       }
       
       // 添加屏幕闪烁效果
@@ -795,8 +568,6 @@
       if (wishBtn) {
         wishBtn.addEventListener('click', () => {
           console.log('点击有祝福按钮被点击');
-          // 首次点击时进行音频测试
-          testAudioOnFirstInteraction();
           try {
             showWishModal();
           } catch (error) {
@@ -864,13 +635,11 @@
       document.addEventListener('keydown', (e) => {
         console.log('键盘按键被按下:', e.key);
         if (e.key === ' ' || e.key === 'Enter') {
-          // 首次按下时进行音频测试
-          testAudioOnFirstInteraction();
           try {
             showWishModal();
           } catch (error) {
             console.error('键盘触发发窗口失败:', error);
-            alert('愿你每一天都像今天一样开心快乐！');
+            alert('愿你每一天都像今天今天一样开心快乐！');
           }
         } else if (e.key === 'f') {
           try {
@@ -893,8 +662,6 @@
           pigImage.classList.remove('animate-float');
           // 添加弹跳动画
           pigImage.classList.add('animate-bounce');
-          // 播放弹跳音效
-          playSound(440, 0.2);
           // 0.5秒后恢复float动画
           setTimeout(() => {
             pigImage.classList.remove('animate-bounce');
@@ -902,18 +669,6 @@
           }, 500);
         });
       }
-      
-      // 添加页面点击事件，用于激活音频
-      document.addEventListener('click', function initAudio() {
-        console.log('页面被点击，尝试激活音频');
-        try {
-          testAudioOnFirstInteraction();
-        } catch (error) {
-          console.error('音频初始化失败:', error);
-        }
-        // 移除事件监听器，避免重复调用
-        document.removeEventListener('click', initAudio);
-      }, { once: true });
       
       // 添加一个简单的测试按钮，用于调试
       const testButton = document.createElement('button');
